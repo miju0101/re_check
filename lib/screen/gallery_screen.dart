@@ -22,7 +22,7 @@ class GalleryScreen extends StatelessWidget {
         actions: [
           ElevatedButton(
             onPressed: () async {
-              galleryService.uploadImage(myInfo);
+              galleryService.uploadImages(myInfo);
             },
             child: Text("올리기"),
           )
@@ -56,9 +56,19 @@ class GalleryScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Image.network(
-                    current_img["photo_url"],
-                    fit: BoxFit.cover,
+                  child: Stack(
+                    children: [
+                      Image.network(
+                        current_img["photo_url"][0],
+                        fit: BoxFit.cover,
+                      ),
+                      if (current_img["photo_url"].length > 1)
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Text("+${current_img["photo_url"].length}"),
+                        ),
+                    ],
                   ),
                 );
               },

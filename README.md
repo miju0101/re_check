@@ -15,11 +15,11 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-#todo
+#todo<br>
 갤러리 부분
 
 - 이미지 올리기(하나) - 완료
-- 이미지 올리기(여러개)
+- 이미지 올리기(여러개) - 완료
 - 이미지 삭제
 - 이미지 다운로드
 
@@ -29,3 +29,6 @@ samples, guidance on mobile development, and a full API reference.
 - 사진
 
 자동로그인
+
+#에러<br>
+갤러리 - 이미지 작업이 완료되기 전 화면을 이탈하면 생기는 오류
