@@ -1,40 +1,75 @@
+import 'package:check/screen/login_screen.dart';
+import 'package:check/service/user_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
-  Map<String, dynamic> my = {
-    "email": "fffdjd23@gmail.com",
-    "name": "야옹",
-    "profile_img":
-        "https://lh3.googleusercontent.com/a/AAcHTtf-kUHdCIz-GhNoSxZidMFBwJtKs9Futl1Nh1ohvw=s96-c",
-    "uid": "sKQR2hjQuzYjWiEHClaMDKGaJTi1",
-  };
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    initUserInfo();
+  }
+
+  bool isLoading = true;
+
+  Map<String, dynamic>? myInfo;
+
+  void initUserInfo() async {
+    var userService = UserSerive();
+
+    DocumentSnapshot snapshot =
+        await userService.getMyInfo(userService.user()!.uid);
+    myInfo = snapshot.data() as Map<String, dynamic>;
+
+    print(myInfo);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(my["profile_img"]),
-                ),
-                Text(my["name"]),
-              ],
+      body: isLoading
+          ? CircularProgressIndicator()
+          : SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(myInfo!["profile_img"]),
+                      ),
+                      Text(myInfo!["name"]),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      var userService = UserSerive();
+                      userService.signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
+                    },
+                    child: Text("로그아웃"),
+                  )
+                ],
+              ),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Text("로그아웃"),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

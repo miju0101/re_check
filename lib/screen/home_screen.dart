@@ -1,118 +1,116 @@
 import 'package:check/screen/gallery_screen.dart';
+import 'package:check/service/check_service.dart';
+import 'package:check/service/user_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-  List<Map<String, dynamic>> checks = [
-    {
-      "name": "야옹",
-      "photo_url":
-          "https://firebasestorage.googleapis.com/v0/b/gallery-7e9ba.appspot.com/o/gallery%2FO8ys30kmfIfLSYVkAxot?alt=media&token=6a0d0ef0-32c3-46b3-89d2-80dd191e1638",
-      "profile_img":
-          "https://lh3.googleusercontent.com/a/AAcHTtf-kUHdCIz-GhNoSxZidMFBwJtKs9Futl1Nh1ohvw=s96-c",
-      "sendDate": "2023년 5월 28일 오후 2시 32분 20초 UTC+9",
-      "uid": "sKQR2hjQuzYjWiEHClaMDKGaJTi1"
-    },
-    {
-      "name": "야옹",
-      "photo_url":
-          "https://firebasestorage.googleapis.com/v0/b/gallery-7e9ba.appspot.com/o/gallery%2FO8ys30kmfIfLSYVkAxot?alt=media&token=6a0d0ef0-32c3-46b3-89d2-80dd191e1638",
-      "profile_img":
-          "https://lh3.googleusercontent.com/a/AAcHTtf-kUHdCIz-GhNoSxZidMFBwJtKs9Futl1Nh1ohvw=s96-c",
-      "sendDate": "2023년 5월 28일 오후 2시 32분 20초 UTC+9",
-      "uid": "sKQR2hjQuzYjWiEHClaMDKGaJTi1"
-    },
-    {
-      "name": "야옹",
-      "photo_url":
-          "https://firebasestorage.googleapis.com/v0/b/gallery-7e9ba.appspot.com/o/gallery%2FO8ys30kmfIfLSYVkAxot?alt=media&token=6a0d0ef0-32c3-46b3-89d2-80dd191e1638",
-      "profile_img":
-          "https://lh3.googleusercontent.com/a/AAcHTtf-kUHdCIz-GhNoSxZidMFBwJtKs9Futl1Nh1ohvw=s96-c",
-      "sendDate": "2023년 5월 28일 오후 2시 32분 20초 UTC+9",
-      "uid": "sKQR2hjQuzYjWiEHClaMDKGaJTi1"
-    },
-    {
-      "name": "야옹",
-      "photo_url":
-          "https://firebasestorage.googleapis.com/v0/b/gallery-7e9ba.appspot.com/o/gallery%2FO8ys30kmfIfLSYVkAxot?alt=media&token=6a0d0ef0-32c3-46b3-89d2-80dd191e1638",
-      "profile_img":
-          "https://lh3.googleusercontent.com/a/AAcHTtf-kUHdCIz-GhNoSxZidMFBwJtKs9Futl1Nh1ohvw=s96-c",
-      "sendDate": "2023년 5월 28일 오후 2시 32분 20초 UTC+9",
-      "uid": "sKQR2hjQuzYjWiEHClaMDKGaJTi1"
-    },
-    {
-      "name": "야옹",
-      "photo_url":
-          "https://firebasestorage.googleapis.com/v0/b/gallery-7e9ba.appspot.com/o/gallery%2FO8ys30kmfIfLSYVkAxot?alt=media&token=6a0d0ef0-32c3-46b3-89d2-80dd191e1638",
-      "profile_img":
-          "https://lh3.googleusercontent.com/a/AAcHTtf-kUHdCIz-GhNoSxZidMFBwJtKs9Futl1Nh1ohvw=s96-c",
-      "sendDate": "2023년 5월 28일 오후 2시 32분 20초 UTC+9",
-      "uid": "sKQR2hjQuzYjWiEHClaMDKGaJTi1"
-    },
-  ];
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    initUserInfo();
+  }
+
+  bool isLoading = true;
+
+  Map<String, dynamic>? myInfo;
+
+  void initUserInfo() async {
+    var userService = UserSerive();
+
+    DocumentSnapshot snapshot =
+        await userService.getMyInfo(userService.user()!.uid);
+    myInfo = snapshot.data() as Map<String, dynamic>;
+
+    print(myInfo);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    var checkService = CheckService();
+
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text("오늘 출석"),
-                  Spacer(),
-                  //체크 버튼
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text("출석하기"),
-                  )
-                ],
-              ),
-              //체크 목록
-              GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1 / 1,
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                itemCount: checks.length,
-                itemBuilder: (context, index) {
-                  var current_user = checks[index];
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage(
-                          current_user["profile_img"],
-                        ),
-                      ),
-                      Text(
-                        current_user["name"],
-                      )
-                    ],
-                  );
-                },
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GalleryScreen(),
+      body: isLoading
+          ? CircularProgressIndicator()
+          : SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text("오늘 출석"),
+                        Spacer(),
+                        //체크 버튼
+                        ElevatedButton(
+                          onPressed: () async {
+                            checkService.check(myInfo!);
+                          },
+                          child: const Text("출석하기"),
+                        )
+                      ],
                     ),
-                  );
-                },
-                child: Text("갤러리"),
+                    //체크 목록
+                    StreamBuilder(
+                      stream: checkService.getChecks(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          var docs = snapshot.data!.docs;
+
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: docs.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                            ),
+                            itemBuilder: (context, index) {
+                              var current_user = docs[index];
+
+                              return Column(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        current_user["profile_img"]),
+                                  ),
+                                  Text(current_user["name"]),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GalleryScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text("갤러리"),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

@@ -68,4 +68,14 @@ class UserSerive {
       "profile_img": myInfo.user!.photoURL,
     });
   }
+
+  //유저의 기본정보
+  Future<DocumentSnapshot> getMyInfo(String uid) {
+    return FirebaseFirestore.instance.collection("users").doc(uid).get();
+  }
+
+  //로그아웃
+  void signOut() {
+    FirebaseAuth.instance.signOut();
+  }
 }
