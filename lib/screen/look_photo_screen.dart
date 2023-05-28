@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LookPhotoScreen extends StatelessWidget {
-  const LookPhotoScreen({super.key});
+  const LookPhotoScreen({required this.photo_info});
+  final QueryDocumentSnapshot photo_info;
 
   @override
   Widget build(BuildContext context) {
-    var img =
-        "https://firebasestorage.googleapis.com/v0/b/gallery-7e9ba.appspot.com/o/gallery%2FO8ys30kmfIfLSYVkAxot?alt=media&token=6a0d0ef0-32c3-46b3-89d2-80dd191e1638";
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -19,21 +19,28 @@ class LookPhotoScreen extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("야옹"),
-            Text("2022 2.23 오전 3시 10분"),
+            Text(photo_info["name"]),
+            Text(
+              DateFormat("yyyy M dd a hh:mm").format(
+                photo_info["sendDate"].toDate(),
+              ),
+              style: TextStyle(fontSize: 15),
+            ),
           ],
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
-              Icons.more_vert_outlined,
-            ),
+            icon: Icon(Icons.download),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.delete),
           )
         ],
       ),
       body: Image.network(
-        img,
+        photo_info["photo_url"],
         fit: BoxFit.cover,
       ),
     );

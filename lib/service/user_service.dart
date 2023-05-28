@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserSerive {
   User? user() {
@@ -77,5 +78,13 @@ class UserSerive {
   //로그아웃
   void signOut() {
     FirebaseAuth.instance.signOut();
+  }
+
+  //프로필 사진 변경
+  void changeProfileImg() async {
+    XFile? selectedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (selectedFile != null) {}
   }
 }

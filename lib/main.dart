@@ -1,5 +1,4 @@
 import 'package:check/screen/login_screen.dart';
-import 'package:check/screen/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

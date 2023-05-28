@@ -47,9 +47,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(myInfo!["profile_img"]),
+                      InkWell(
+                        onTap: () {},
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(myInfo!["profile_img"]),
+                        ),
                       ),
                       Text(myInfo!["name"]),
                     ],
