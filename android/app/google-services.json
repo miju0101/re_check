@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458403270947",
+    "project_id": "recheck-d3ef1",
+    "storage_bucket": "recheck-d3ef1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458403270947:android:07d9d8efb7dc23d92d3c96",
+        "android_client_info": {
+          "package_name": "com.example.check"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPWMHAWur7UoWZugpBtO-DwbnOpwgj2OQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
