@@ -9,7 +9,7 @@ class GalleryService {
   void uploadImages(Map<String, dynamic> myInfo) async {
     List<XFile>? selectedFiles = await ImagePicker().pickMultiImage();
 
-    if (selectedFiles != null) {
+    if (selectedFiles != null && selectedFiles.length > 0) {
       var files = List.generate(
           selectedFiles.length, (index) => File(selectedFiles[index].path));
 

@@ -31,4 +31,4 @@ samples, guidance on mobile development, and a full API reference.
 자동로그인
 
 #에러<br>
-갤러리 - 이미지 작업이 완료되기 전 화면을 이탈하면 생기는 오류
+갤러리 - 이미지 작업이 완료되기 전 화면을 이탈하면 생기는 오류.<br> - 이미지 선택안함-> 홈 화면으로 이동 -> 다시 갤러리 화면으로 이동 시 생기는 오류(해결 완료)<br>
