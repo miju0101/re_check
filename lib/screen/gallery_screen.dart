@@ -10,6 +10,7 @@ class GalleryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var galleryService = GalleryService();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -39,8 +40,6 @@ class GalleryScreen extends StatelessWidget {
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
               ),
               itemBuilder: (context, index) {
                 var current_img = doc[index];
@@ -58,15 +57,19 @@ class GalleryScreen extends StatelessWidget {
                   },
                   child: Stack(
                     children: [
-                      Image.network(
-                        current_img["photo_url"][0],
-                        fit: BoxFit.cover,
+                      Positioned.fill(
+                        child: Image.network(
+                          current_img["photo_url"][0],
+                          fit: BoxFit.cover,
+                        ),
                       ),
+                      //이미지 개수
                       if (current_img["photo_url"].length > 1)
                         Positioned(
                           bottom: 0,
                           right: 0,
-                          child: Text("+${current_img["photo_url"].length}"),
+                          child:
+                              Text("+${current_img["photo_url"].length - 1}"),
                         ),
                     ],
                   ),

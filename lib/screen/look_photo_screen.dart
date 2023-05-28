@@ -45,7 +45,7 @@ class LookPhotoScreen extends StatelessWidget {
             onPressed: () {},
             icon: Icon(Icons.download),
           ),
-          if (photo_info["uid"] == myUid) //내가 올린 이미지인 경우에만 삭제가능
+          if (photo_info["uid"] == myUid) //올린사람이 자신인 경우 삭제가능
             IconButton(
               onPressed: () {
                 galleryService.deleteImg(photo_info.id);
@@ -60,12 +60,22 @@ class LookPhotoScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           var current_img = photo_info["photo_url"][index];
 
-          return Center(
-            child: Image.network(
-              current_img,
-              fit: BoxFit.cover,
+          return Stack(children: [
+            Center(
+              child: Image.network(
+                current_img,
+                fit: BoxFit.cover,
+              ),
             ),
-          );
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Text(
+                "${index + 1}/${photo_info["photo_url"].length}",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ]);
         },
       ),
     );

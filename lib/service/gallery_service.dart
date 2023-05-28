@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 class GalleryService {
   //이미지 업로드 여러개
@@ -72,7 +74,7 @@ class GalleryService {
   }
 
   //이미지 다운로드
-  void downLoadImg() {}
+  void downLoadImg(String url) async {}
 
   //내가 올린 이미지 삭제
   void deleteImg(String docId) {
