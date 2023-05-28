@@ -20,7 +20,7 @@ samples, guidance on mobile development, and a full API reference.
 
 - 이미지 올리기(하나) - 완료
 - 이미지 올리기(여러개) - 완료
-- 이미지 삭제
+- 이미지 삭제 - 완료
 - 이미지 다운로드
 
 프로필 수정

@@ -51,8 +51,8 @@ class GalleryScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            LookPhotoScreen(photo_info: current_img),
+                        builder: (context) => LookPhotoScreen(
+                            photo_info: current_img, myUid: myInfo["uid"]),
                       ),
                     );
                   },
