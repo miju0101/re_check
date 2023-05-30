@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -15,11 +14,11 @@ class GalleryService {
           selectedFiles.length, (index) => File(selectedFiles[index].path));
 
       //트랜잭션을 하면 여러 작업을 하나의 작업으로 간주함(원자성)
-      //작업 수행 이전 상태로 롤백됨.
+      //작업 수행 중 실패시  이전 상태로 롤백됨.
       try {
         await FirebaseFirestore.instance.runTransaction((transaction) async {
           DocumentReference doc =
-              await FirebaseFirestore.instance.collection("gallery").add({});
+              await FirebaseFirestore.instance.collection("gallery").doc();
 
           List tasks = [];
 
@@ -65,14 +64,6 @@ class GalleryService {
     }
   }
 
-  //이미지 받아오기
-  // Future<QuerySnapshot> getPhotos() {
-  //   return FirebaseFirestore.instance
-  //       .collection("gallery")
-  //       .orderBy("sendDate", descending: true)
-  //       .get();
-  // }
-
   Future<QuerySnapshot> getPhotos() {
     return FirebaseFirestore.instance
         .collection("gallery")
@@ -84,7 +75,7 @@ class GalleryService {
   void downLoadImg(String url) async {}
 
   //내가 올린 이미지 삭제
-  void deleteImg(String docId) {
+  void deleteImg(String docId) async {
     FirebaseFirestore.instance.collection("gallery").doc(docId).delete();
     FirebaseStorage.instance.ref().child("gallery").child(docId).delete();
   }
