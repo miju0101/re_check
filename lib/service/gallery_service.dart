@@ -55,7 +55,10 @@ class GalleryService {
 
   //이미지 받아오기
   Future<QuerySnapshot> getPhotos() {
-    return FirebaseFirestore.instance.collection("gallery").get();
+    return FirebaseFirestore.instance
+        .collection("gallery")
+        .orderBy("sendDate", descending: true)
+        .get();
   }
 
   //이미지 다운로드

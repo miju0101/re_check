@@ -2,11 +2,16 @@ import 'package:check/screen/look_photo_screen.dart';
 import 'package:check/service/gallery_service.dart';
 import 'package:flutter/material.dart';
 
-class GalleryScreen extends StatelessWidget {
+class GalleryScreen extends StatefulWidget {
   final Map<String, dynamic> myInfo;
 
   const GalleryScreen({required this.myInfo});
 
+  @override
+  State<GalleryScreen> createState() => _GalleryScreenState();
+}
+
+class _GalleryScreenState extends State<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
     var galleryService = GalleryService();
@@ -21,9 +26,10 @@ class GalleryScreen extends StatelessWidget {
         ),
         title: const Text("갤러리"),
         actions: [
+          //이미지 올리기
           ElevatedButton(
-            onPressed: () async {
-              galleryService.uploadImages(myInfo);
+            onPressed: () {
+              galleryService.uploadImages(widget.myInfo);
             },
             child: Text("올리기"),
           )
@@ -51,7 +57,8 @@ class GalleryScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => LookPhotoScreen(
-                            photo_info: current_img, myUid: myInfo["uid"]),
+                            photo_info: current_img,
+                            myUid: widget.myInfo["uid"]),
                       ),
                     );
                   },
