@@ -3,8 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
 class GalleryService {
   //이미지 업로드 여러개
@@ -33,19 +31,6 @@ class GalleryService {
 
       List<String> urls = [];
 
-      // for (UploadTask task in tasks) {
-      //   task.snapshotEvents.listen((event) async {
-      //     if (event.state == TaskState.success) {
-      //       var url = await event.ref.getDownloadURL();
-
-      //       urls.add(url);
-      //     }
-
-      //     print("이미지 저장완료 완료");
-      //   });
-      // }
-
-      // (chat gpt)위에 코드는 비동기 함수라 다음 아래코드와 같이 작성해야 함.
       await Future.wait(tasks.map((task) async {
         TaskSnapshot snapshot = await task;
 
