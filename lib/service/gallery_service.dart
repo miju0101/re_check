@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -13,47 +14,65 @@ class GalleryService {
       var files = List.generate(
           selectedFiles.length, (index) => File(selectedFiles[index].path));
 
-      DocumentReference doc =
-          await FirebaseFirestore.instance.collection("gallery").add({});
+      //트랜잭션을 하면 여러 작업을 하나의 작업으로 간주함(원자성)
+      //작업 수행 이전 상태로 롤백됨.
+      try {
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          DocumentReference doc =
+              await FirebaseFirestore.instance.collection("gallery").add({});
 
-      List tasks = [];
+          List tasks = [];
 
-      for (File file in files) {
-        UploadTask task = FirebaseStorage.instance
-            .ref()
-            .child("gallery")
-            .child(doc.id)
-            .child(basename(file.path).split(".").first)
-            .putFile(file);
+          for (File file in files) {
+            UploadTask task = FirebaseStorage.instance
+                .ref()
+                .child("gallery")
+                .child(doc.id)
+                .child(basename(file.path).split(".").first)
+                .putFile(file);
 
-        tasks.add(task);
+            tasks.add(task);
+          }
+
+          List<String> urls = [];
+
+          await Future.wait(tasks.map((task) async {
+            TaskSnapshot snapshot = await task;
+
+            if (snapshot.state == TaskState.success) {
+              var url = await snapshot.ref.getDownloadURL();
+
+              urls.add(url);
+            }
+          }));
+
+          await FirebaseFirestore.instance
+              .collection("gallery")
+              .doc(doc.id)
+              .set({
+            "uid": myInfo["uid"],
+            "name": myInfo["name"],
+            "profile_img": myInfo["profile_img"],
+            "sendDate": DateTime.now(),
+            "photo_url": urls,
+          });
+        });
+
+        print("최종 저장완료");
+      } catch (e) {
+        print("트랜잭션 실패");
       }
-
-      List<String> urls = [];
-
-      await Future.wait(tasks.map((task) async {
-        TaskSnapshot snapshot = await task;
-
-        if (snapshot.state == TaskState.success) {
-          var url = await snapshot.ref.getDownloadURL();
-
-          urls.add(url);
-        }
-      }));
-
-      FirebaseFirestore.instance.collection("gallery").doc(doc.id).set({
-        "uid": myInfo["uid"],
-        "name": myInfo["name"],
-        "profile_img": myInfo["profile_img"],
-        "sendDate": DateTime.now(),
-        "photo_url": urls,
-      });
-
-      print("최종 저장완료");
     }
   }
 
   //이미지 받아오기
+  // Future<QuerySnapshot> getPhotos() {
+  //   return FirebaseFirestore.instance
+  //       .collection("gallery")
+  //       .orderBy("sendDate", descending: true)
+  //       .get();
+  // }
+
   Future<QuerySnapshot> getPhotos() {
     return FirebaseFirestore.instance
         .collection("gallery")
