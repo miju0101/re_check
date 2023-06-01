@@ -13,8 +13,6 @@ class GalleryService {
       var files = List.generate(
           selectedFiles.length, (index) => File(selectedFiles[index].path));
 
-      //트랜잭션을 하면 여러 작업을 하나의 작업으로 간주함(원자성)
-      //작업 수행 중 실패시  이전 상태로 롤백됨.
       try {
         await FirebaseFirestore.instance.runTransaction((transaction) async {
           DocumentReference doc =
@@ -64,13 +62,6 @@ class GalleryService {
     }
   }
 
-  // Future<QuerySnapshot> getPhotos() {
-  //   return FirebaseFirestore.instance
-  //       .collection("gallery")
-  //       .orderBy("sendDate", descending: true)
-  //       .get();
-  // }
-
   Stream<QuerySnapshot> getPhotos() {
     return FirebaseFirestore.instance
         .collection("gallery")
@@ -81,34 +72,6 @@ class GalleryService {
   //이미지 다운로드
   void downLoadImg(String url) async {}
 
-  //내가 올린 이미지 삭제
-  // void deleteImg(String docId) async {
-  //   try {
-  //     FirebaseFirestore.instance.runTransaction((transaction) async {
-  //       await FirebaseFirestore.instance
-  //           .collection("gallery")
-  //           .doc(docId)
-  //           .delete();
-
-  //       ListResult listResult = await FirebaseStorage.instance
-  //           .ref()
-  //           .child("gallery")
-  //           .child(docId)
-  //           .listAll();
-  //       for (final item in listResult.items) {
-  //         await item.delete();
-  //       }
-
-  //       await FirebaseStorage.instance
-  //           .ref()
-  //           .child("gallery")
-  //           .child(docId)
-  //           .delete();
-  //     });
-  //   } catch (e) {
-  //     print("트랜잭션 실패");
-  //   }
-  // }
   void deleteImg(String docId) async {
     await FirebaseFirestore.instance.collection("gallery").doc(docId).delete();
 
