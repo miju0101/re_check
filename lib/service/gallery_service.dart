@@ -64,20 +64,67 @@ class GalleryService {
     }
   }
 
-  Future<QuerySnapshot> getPhotos() {
+  // Future<QuerySnapshot> getPhotos() {
+  //   return FirebaseFirestore.instance
+  //       .collection("gallery")
+  //       .orderBy("sendDate", descending: true)
+  //       .get();
+  // }
+
+  Stream<QuerySnapshot> getPhotos() {
     return FirebaseFirestore.instance
         .collection("gallery")
         .orderBy("sendDate", descending: true)
-        .get();
+        .snapshots();
   }
 
   //이미지 다운로드
   void downLoadImg(String url) async {}
 
   //내가 올린 이미지 삭제
+  // void deleteImg(String docId) async {
+  //   try {
+  //     FirebaseFirestore.instance.runTransaction((transaction) async {
+  //       await FirebaseFirestore.instance
+  //           .collection("gallery")
+  //           .doc(docId)
+  //           .delete();
+
+  //       ListResult listResult = await FirebaseStorage.instance
+  //           .ref()
+  //           .child("gallery")
+  //           .child(docId)
+  //           .listAll();
+  //       for (final item in listResult.items) {
+  //         await item.delete();
+  //       }
+
+  //       await FirebaseStorage.instance
+  //           .ref()
+  //           .child("gallery")
+  //           .child(docId)
+  //           .delete();
+  //     });
+  //   } catch (e) {
+  //     print("트랜잭션 실패");
+  //   }
+  // }
   void deleteImg(String docId) async {
-    FirebaseFirestore.instance.collection("gallery").doc(docId).delete();
-    FirebaseStorage.instance.ref().child("gallery").child(docId).delete();
+    await FirebaseFirestore.instance.collection("gallery").doc(docId).delete();
+
+    // 이미지 삭제
+    Reference folderRef =
+        FirebaseStorage.instance.ref().child("gallery").child(docId);
+    ListResult listResult = await folderRef.listAll();
+
+    for (final item in listResult.items) {
+      await item.delete();
+    }
+
+    // 폴더 삭제
+    //await folderRef.delete();
+
+    print("이미지 및 폴더 삭제가 완료되었습니다.");
   }
 
   //최근 올린 사진 가져오기

@@ -35,8 +35,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
           )
         ],
       ),
-      body: FutureBuilder(
-        future: galleryService.getPhotos(),
+      body: StreamBuilder(
+        stream: galleryService.getPhotos(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var doc = snapshot.data!.docs;
